@@ -146,13 +146,6 @@
         // headers
         settings.headers = extend(baseHeader, settings.headers || {});
 
-        // xhrFields
-        if (settings.xhrFields) {
-            for (var name in settings.xhrFields) {
-                xhr[name] = settings.xhrFields[name];
-            }
-        }
-
         // on ready state change
         xhr.onreadystatechange = function () {
             //
@@ -197,6 +190,19 @@
 
         // open
         xhr.open(settings.type, settings.url, async, settings.username, settings.password);
+
+        // xhrFields
+        if (settings.xhrFields) {
+            for (var name in settings.xhrFields) {
+                xhr[name] = settings.xhrFields[name];
+            }
+        }
+
+        // Override mime type if needed
+        if (settings.mimeType && xhr.overrideMimeType) {
+            xhr.overrideMimeType(settings.mimeType);
+        }
+
 
         // set request header
         for (var name in settings.headers) {

@@ -146,6 +146,17 @@ processData
 都会处理转化成一个查询字符串，以配合默认内容类型 "application/x-www-form-urlencoded"。
 如果要发送 DOM 树信息或其它不希望转换的信息，请设置为 false。
 
+
+xhrFields
+> 对象object。可以支持 withCredentials，Access-Control-Allow-Credentials，参数
+其中 withCredentials 兼容性是 IE10+
+
+
+mimeType
+> (一个mime类型用来覆盖XHR的 MIME类型。)
+
+
+
 ## 暂不支持的参数
 
 xhr
@@ -166,8 +177,7 @@ $.ajax({
 ```
 
 
-mimeType
-> (一个mime类型用来覆盖XHR的 MIME类型。)
+
 
 
 isLocal
