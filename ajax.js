@@ -1,4 +1,3 @@
-
 // a simple ajax
 !(function () {
 
@@ -489,9 +488,9 @@
         var args = slice.call(arguments, 1);
         //
         for (var i = 0, length = args.length; i < length; i++) {
-            var source = args[i];
-            for (var key in  args[i]) {
-                if (source[key] !== undefined) {
+            var source = args[i] || {};
+            for (var key in  source) {
+                if (source.hasOwnProperty(key) && source[key] !== undefined) {
                     target[key] = source[key];
                 }
             }
