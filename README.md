@@ -216,3 +216,9 @@ cache
 ## 支持 promise化（ IE 不支持）
 
 添加了promise ，支持 then 和 catch 方法。IE 不支持。。。
+
+
+
+## 整体效果
+
+
