@@ -92,7 +92,7 @@
 
         var dataType = settings.dataType;
         // jsonp
-        if (dataType == 'jsonp') {
+        if (dataType === 'jsonp') {
             var hasPlaceholder = /=\?/.test(settings.url);
             if (!hasPlaceholder) {
                 var jsonpCallback = (settings.jsonp || 'callback') + '=?';
@@ -138,7 +138,7 @@
         }
 
         // contentType
-        if (settings.contentType || (settings.data && settings.type.toUpperCase() != 'GET')) {
+        if (settings.contentType || (settings.data && settings.type.toUpperCase() !== 'GET')) {
             baseHeader['Content-Type'] = (settings.contentType || 'application/x-www-form-urlencoded; charset=UTF-8');
         }
 
@@ -153,16 +153,16 @@
                 var result;
                 var error = false;
 
-                if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+                if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
                     dataType = dataType || mimeToDataType(xhr.getResponseHeader('content-type'));
                     result = xhr.responseText;
 
                     try {
                         // xml
-                        if (dataType == 'xml') {
+                        if (dataType === 'xml') {
                             result = xhr.responseXML;
                         }
-                        else if (dataType == 'json') {
+                        else if (dataType === 'json') {
                             result = blankRE.test(result) ? null : JSON.parse(result);
                         }
                     }
@@ -310,7 +310,7 @@
     function ajaxBeforeSend(xhr, settings) {
         var context = settings.context;
         //
-        if (settings.beforeSend.call(context, xhr, settings) == false) {
+        if (settings.beforeSend.call(context, xhr, settings) === false) {
             return false;
         }
     }
@@ -440,7 +440,7 @@
             options.data = param(options.data);
         }
 
-        if (options.data && (!options.type || options.type.toUpperCase() == 'GET')) {
+        if (options.data && (!options.type || options.type.toUpperCase() === 'GET')) {
             options.url = appendQuery(options.url, options.data);
         }
     }
