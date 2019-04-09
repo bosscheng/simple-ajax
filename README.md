@@ -221,4 +221,5 @@ cache
 
 ## 整体效果
 
+<img src="./doc/ajax.jpeg"></img>
 
