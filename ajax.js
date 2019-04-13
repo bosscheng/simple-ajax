@@ -47,11 +47,9 @@
         promise: noop
     };
 
-    // empty method
     function noop() {
     }
 
-    // ajax
     var ajax = function (options) {
 
         //
@@ -64,6 +62,7 @@
             }
         }
 
+        //
         try {
             var q = {};
             var promise = new Promise(function (resolve, reject) {
@@ -77,7 +76,7 @@
             settings.promise = promise;
         }
         catch (e) {
-            // 兼容
+            //
             settings.promise = {
                 resolve: noop,
                 reject: noop
@@ -93,6 +92,7 @@
         var dataType = settings.dataType;
         // jsonp
         if (dataType === 'jsonp') {
+            //
             var hasPlaceholder = /=\?/.test(settings.url);
             if (!hasPlaceholder) {
                 var jsonpCallback = (settings.jsonp || 'callback') + '=?';
@@ -147,12 +147,12 @@
 
         // on ready state change
         xhr.onreadystatechange = function () {
-            //
+            // readystate
             if (xhr.readyState === 4) {
                 clearTimeout(abortTimeout);
                 var result;
                 var error = false;
-
+                //
                 if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
                     dataType = dataType || mimeToDataType(xhr.getResponseHeader('content-type'));
                     result = xhr.responseText;
@@ -162,6 +162,7 @@
                         if (dataType === 'xml') {
                             result = xhr.responseXML;
                         }
+                        // json
                         else if (dataType === 'json') {
                             result = blankRE.test(result) ? null : JSON.parse(result);
                         }
@@ -385,7 +386,7 @@
         script.src = options.url.replace(/=\?/, '=' + callbackName);
         //
         script.src = appendQuery(script.src, '_=' + (new Date()).getTime());
-
+        //
         script.async = true;
 
         // script charset
@@ -393,8 +394,10 @@
             script.charset = options.scriptCharset;
         }
 
+        //
         head.insertBefore(script, head.firstChild);
 
+        //
         if (options.timeout > 0) {
             abortTimeout = window.setTimeout(function () {
                 xhr.abort();
@@ -403,7 +406,7 @@
             }, options.timeout);
         }
 
-        //
+        // remove script
         function _removeScript() {
             if (script.clearAttributes) {
                 script.clearAttributes();
@@ -425,7 +428,7 @@
 
     //  mime to data type
     function mimeToDataType(mime) {
-        return mime && (mime == htmlType ? 'html' : mime == jsonType ? 'json' : xmlTypeRE.test(mime) && 'xml') || 'text'
+        return mime && (mime === htmlType ? 'html' : mime === jsonType ? 'json' : xmlTypeRE.test(mime) && 'xml') || 'text'
     }
 
     // append query
@@ -435,7 +438,7 @@
 
     // serialize data
     function serializeData(options) {
-        // 排除掉 formData
+        // formData
         if (isObject(options) && !isFormData(options.data) && options.processData) {
             options.data = param(options.data);
         }
