@@ -235,6 +235,8 @@
         settings.promise.abort = function () {
             xhr.abort();
         };
+
+        //
         return settings.promise;
     };
 
