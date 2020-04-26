@@ -74,8 +74,7 @@
             promise.reject = q.reject;
 
             settings.promise = promise;
-        }
-        catch (e) {
+        } catch (e) {
             //
             settings.promise = {
                 resolve: noop,
@@ -166,19 +165,16 @@
                         else if (dataType === 'json') {
                             result = blankRE.test(result) ? null : JSON.parse(result);
                         }
-                    }
-                    catch (e) {
+                    } catch (e) {
                         error = e;
                     }
 
                     if (error) {
                         ajaxError(error, 'parseerror', xhr, settings);
-                    }
-                    else {
+                    } else {
                         ajaxSuccess(result, xhr, settings);
                     }
-                }
-                else {
+                } else {
                     ajaxError(null, 'error', xhr, settings);
                 }
 
@@ -235,6 +231,10 @@
         // send
         xhr.send(settings.data ? settings.data : null);
 
+        // abort method
+        settings.promise.abort = function () {
+            xhr.abort();
+        };
         return settings.promise;
     };
 
@@ -463,11 +463,9 @@
             if (!scope && _isArray) {
                 params.add(value.name, value.value);
 
-            }
-            else if (traditional ? _isArray(value) : isObject(value)) {
+            } else if (traditional ? _isArray(value) : isObject(value)) {
                 serialize(params, value, traditional, key);
-            }
-            else {
+            } else {
                 params.add(key, value);
             }
         }
@@ -492,7 +490,7 @@
         //
         for (var i = 0, length = args.length; i < length; i++) {
             var source = args[i] || {};
-            for (var key in  source) {
+            for (var key in source) {
                 if (source.hasOwnProperty(key) && source[key] !== undefined) {
                     target[key] = source[key];
                 }
