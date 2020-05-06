@@ -198,8 +198,6 @@
         if (settings.mimeType && xhr.overrideMimeType) {
             xhr.overrideMimeType(settings.mimeType);
         }
-
-
         // set request header
         for (var name in settings.headers) {
             // Support: IE<9
@@ -212,13 +210,11 @@
                 xhr.setRequestHeader(name, settings.headers[name] + "");
             }
         }
-
         // before send
         if (ajaxBeforeSend(xhr, settings) === false) {
             xhr.abort();
             return false;
         }
-
         // timeout
         if (settings.timeout > 0) {
             abortTimeout = window.setTimeout(function () {
@@ -227,15 +223,12 @@
                 ajaxError(null, 'timeout', xhr, settings);
             }, settings.timeout);
         }
-
         // send
         xhr.send(settings.data ? settings.data : null);
-
         // abort method
         settings.promise.abort = function () {
             xhr.abort();
         };
-
         //
         return settings.promise;
     };
