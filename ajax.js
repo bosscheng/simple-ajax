@@ -44,7 +44,9 @@
 
         processData: true,
 
-        promise: noop
+        promise: noop,
+
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
     };
 
     function noop() {
@@ -136,9 +138,10 @@
             xhr.overrideMimeType && xhr.overrideMimeType(mime);
         }
 
-        // contentType
-        if (settings.contentType || (settings.data && settings.type.toUpperCase() !== 'GET')) {
-            baseHeader['Content-Type'] = (settings.contentType || 'application/x-www-form-urlencoded; charset=UTF-8');
+        // not get and not head
+        var hasContent = !(/^(?:GET|HEAD)$/.test(settings.type.toUpperCase()));
+        if (settings.data && hasContent && settings.contentType !== false || options.contentType) {
+            baseHeader['Content-Type'] = settings.contentType;
         }
 
         // headers
