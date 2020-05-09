@@ -93,6 +93,8 @@ dataType
 
 "text": 返回纯文本字符串
 
+"*": 任意类型
+
 
 error(XMLHttpRequest, textStatus, errorThrown)
 > (默认: 自动判断 (xml 或 html)) 请求失败时调用此函数。有以下三个参数：XMLHttpRequest 对象、错误信息、（可选）捕获的异常对象。如果发生了错误，错误信息（第二个参数）
@@ -171,7 +173,6 @@ xhr
 traditional
 > （如果你想要用传统的方式来序列化数据，那么就设置为true。请参考工具分类下面的jQuery.param 方法。）
 
-
 statusCode
 > （一组数值的HTTP代码和函数对象，当响应时调用了相应的代码。例如，如果响应状态是404，将触发以下警报： ）
 ```
@@ -182,7 +183,6 @@ $.ajax({
 });
 ```
 
-
 isLocal
 > (默认: 取决于当前的位置协议)
 (允许当前环境被认定为“本地”，（如文件系统），即使jQuery默认情况下不会承认它。
@@ -191,11 +191,9 @@ isLocal
 global
 > (默认: true) 是否触发全局 AJAX 事件。设置为 false 将不会触发全局 AJAX 事件，如 ajaxStart 或 ajaxStop 可用于控制不同的 Ajax 事件。
 
-
 dataFilter
 > (给Ajax返回的原始数据的进行预处理的函数。提供data和type两个参数：data是Ajax返回的原始数据，
 type是调用jQuery.ajax时提供的dataType参数。函数返回的值将由jQuery进一步处理。 )
-
 
 converters
 > (默认： {"* text": window.String, "text html": true, "text json": jQuery.parseJSON, "text xml": jQuery.parseXML})
@@ -204,8 +202,6 @@ converters
 
 contents
 > 一个以"{字符串:正则表达式}"配对的对象，用来确定jQuery将如何解析响应，给定其内容类型。
-
-
 
 
 ## 支持 promise化（ IE 不支持）

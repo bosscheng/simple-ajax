@@ -1,7 +1,7 @@
 // a simple ajax
 !(function () {
 
-    var jsonType = 'application/json';
+    var jsonType = 'application/json, text/javascript';
     var htmlType = 'text/html';
     var xmlTypeRE = /^(?:text|application)\/xml/i;
     var rheaders = /^(.*?):[ \t]*([^\r\n]*)\r?$/mg;
@@ -38,7 +38,8 @@
             json: jsonType,
             xml: 'application/xml, text/xml',
             html: htmlType,
-            text: 'text/plain'
+            text: 'text/plain',
+            '*': "*/".concat("*")
         },
 
         crossDomain: false,
@@ -105,6 +106,7 @@
             settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) && RegExp.$2 !== window.location.href;
         }
 
+        //
         var dataType = settings.dataType;
         // jsonp
         if (dataType === 'jsonp') {
@@ -122,7 +124,7 @@
         //
         serializeData(settings);
 
-        var mime = settings.accepts[dataType]; // mime
+        var mime = settings.accepts[dataType] || settings.accepts['*']; // mime
         var baseHeader = {}; // header
         var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol; // protocol
         var xhr = _settings.xhr();
@@ -162,7 +164,7 @@
 
         // not get and not head
         var hasContent = !(/^(?:GET|HEAD)$/.test(settings.type.toUpperCase()));
-        // 
+        //
         if (settings.data && hasContent && settings.contentType !== false || options.contentType) {
             baseHeader['Content-Type'] = settings.contentType;
         }
