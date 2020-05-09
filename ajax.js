@@ -5,6 +5,7 @@
     var htmlType = 'text/html';
     var xmlTypeRE = /^(?:text|application)\/xml/i;
     var rheaders = /^(.*?):[ \t]*([^\r\n]*)\r?$/mg;
+    var rurl = /^([\w.+-]+:)(?:\/\/(?:[^\/?#]*@|)([^\/?#:]*)(?::(\d+)|)|)/;
 
     var blankRE = /^\s*$/; // \s
 
@@ -58,8 +59,11 @@
     function noop() {
     }
 
-    var ajax = function (options) {
-
+    var ajax = function (url, options) {
+        if (typeof url === 'object') {
+            options = url;
+            url = undefined;
+        }
         //
         var settings = extend({}, options || {});
 
@@ -90,8 +94,13 @@
             };
         }
 
+        // url
+        var ajaxLocParts = rurl.exec(window.location.href.toLowerCase()) || [];
+        settings.url = ((url || settings.url || window.location.href) + '')
+            .replace(/#.*$/, '').replace(/^\/\//, ajaxLocParts[1] + "//");
+        var cacheURL = settings.url;
 
-        //
+        // cross domain
         if (!settings.crossDomain) {
             settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) && RegExp.$2 !== window.location.href;
         }
@@ -109,12 +118,7 @@
             return JSONP(settings);
         }
 
-        // url
-        if (!settings.url) {
-            settings.url = window.location.toString();
-        }
 
-        var cacheURL = settings.url;
         //
         serializeData(settings);
 
@@ -144,14 +148,6 @@
             }
         }
 
-        // cache: default true
-        if (settings.cache === false) {
-            var rts = /([?&])_=[^&]*/;
-            settings.url = rts.test(cacheURL) ?
-                cacheURL.replace(rts, "$1_=" + now()) :
-                cacheURL + (/\?/.test(cacheURL) ? "&" : "?") + "_=" + now();
-        }
-
         // mime
         if (mime) {
             //
@@ -166,9 +162,19 @@
 
         // not get and not head
         var hasContent = !(/^(?:GET|HEAD)$/.test(settings.type.toUpperCase()));
+        // 
         if (settings.data && hasContent && settings.contentType !== false || options.contentType) {
             baseHeader['Content-Type'] = settings.contentType;
         }
+
+        // cache: default true
+        if (settings.cache === false && !hasContent) {
+            var rts = /([?&])_=[^&]*/;
+            settings.url = rts.test(cacheURL) ?
+                cacheURL.replace(rts, "$1_=" + now()) :
+                cacheURL + (/\?/.test(cacheURL) ? "&" : "?") + "_=" + now();
+        }
+
 
         // headers
         settings.headers = extend(baseHeader, settings.headers || {});
