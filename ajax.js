@@ -4,8 +4,14 @@
     var jsonType = 'application/json';
     var htmlType = 'text/html';
     var xmlTypeRE = /^(?:text|application)\/xml/i;
+    var rheaders = /^(.*?):[ \t]*([^\r\n]*)\r?$/mg;
+
     var blankRE = /^\s*$/; // \s
 
+    var lastModified = {};
+    var etag = {};
+    var responseHeadersString = '';
+    var responseHeaders;
     /*
      * default setting
      * */
@@ -108,6 +114,7 @@
             settings.url = window.location.toString();
         }
 
+        var cacheURL = settings.url;
         //
         serializeData(settings);
 
@@ -124,6 +131,25 @@
         // For same-domain requests, won't change header if already provided.
         if (!settings.crossDomain && !baseHeader['X-Requested-With']) {
             baseHeader['X-Requested-With'] = 'XMLHttpRequest';
+        }
+
+        // Set the If-Modified-Since and/or If-None-Match header, if in ifModified mode.
+        if (settings.ifModified) {
+            if (lastModified[cacheURL]) {
+                baseHeader['If-Modified-Since'] = lastModified[cacheURL];
+            }
+
+            if (etag[cacheURL]) {
+                baseHeader['If-None-Match'] = etag[cacheURL];
+            }
+        }
+
+        // cache: default true
+        if (settings.cache === false) {
+            var rts = /([?&])_=[^&]*/;
+            settings.url = rts.test(cacheURL) ?
+                cacheURL.replace(rts, "$1_=" + now()) :
+                cacheURL + (/\?/.test(cacheURL) ? "&" : "?") + "_=" + now();
         }
 
         // mime
@@ -154,8 +180,22 @@
                 clearTimeout(abortTimeout);
                 var result;
                 var error = false;
+                var isSuccess = (xhr.status >= 200 && xhr.status < 300) || xhr.status === 304
                 //
-                if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
+                if (isSuccess) {
+                    responseHeadersString = xhr.getAllResponseHeaders();
+
+                    if (settings.ifModified) {
+                        var modified = getResponseHeader('Last-Modified');
+                        if (modified) {
+                            lastModified[cacheURL] = modified;
+                        }
+                        modified = getResponseHeader('etag');
+                        if (modified) {
+                            etag[cacheURL] = modified;
+                        }
+                    }
+
                     dataType = dataType || mimeToDataType(xhr.getResponseHeader('content-type'));
                     result = xhr.responseText;
 
@@ -337,6 +377,18 @@
         ajaxComplete(type, xhr, settings);
     }
 
+    function getResponseHeader(key) {
+        var match;
+        if (!responseHeaders) {
+            responseHeaders = {};
+            while ((match = rheaders.exec(responseHeadersString))) {
+                responseHeaders[match[1].toLowerCase()] = match[2];
+            }
+            match = responseHeaders[key.toLowerCase()];
+        }
+        return match === null ? null : match;
+    }
+
 
     // jsonp
     /*
@@ -344,7 +396,7 @@
      * */
     function JSONP(options) {
         //
-        var callbackName = options.jsonpCallback || 'jsonp' + (new Date().getTime());
+        var callbackName = options.jsonpCallback || 'jsonp' + now();
 
         var script = window.document.createElement('script');
 
@@ -517,6 +569,11 @@
     // is function
     function isFunction(value) {
         return typeof value === "function";
+    }
+
+
+    function now() {
+        return (new Date().getTime());
     }
 
     // RequireJS && SeaJS

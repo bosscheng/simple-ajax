@@ -155,6 +155,12 @@ xhrFields
 mimeType
 > (一个mime类型用来覆盖XHR的 MIME类型。)
 
+ifModified
+> ((默认: false) 仅在服务器数据改变时获取新数据。使用 HTTP 包 Last-Modified 头信息判断。
+也会检查服务器指定的'etag'来确定数据没有被修改过。)
+
+cache
+> ((默认: true,dataType为script和jsonp时默认为false) 设置为 false 将不缓存此页面。)
 
 
 ## 暂不支持的参数
@@ -182,12 +188,6 @@ isLocal
 (允许当前环境被认定为“本地”，（如文件系统），即使jQuery默认情况下不会承认它。
 以下协议目前公认为本地：file, *-extension, and widget。如果isLocal设置需要修改，建议在$.ajaxSetup()方法中这样做一次。)
 
-
-ifModified
-> ((默认: false) 仅在服务器数据改变时获取新数据。使用 HTTP 包 Last-Modified 头信息判断。
-在jQuery 1.4中，他也会检查服务器指定的'etag'来确定数据没有被修改过。)
-
-
 global
 > (默认: true) 是否触发全局 AJAX 事件。设置为 false 将不会触发全局 AJAX 事件，如 ajaxStart 或 ajaxStop 可用于控制不同的 Ajax 事件。
 
@@ -206,8 +206,6 @@ contents
 > 一个以"{字符串:正则表达式}"配对的对象，用来确定jQuery将如何解析响应，给定其内容类型。
 
 
-cache
-> ((默认: true,dataType为script和jsonp时默认为false) jQuery 1.2 新功能，设置为 false 将不缓存此页面。)
 
 
 ## 支持 promise化（ IE 不支持）
