@@ -276,6 +276,7 @@
         }
         // send
         xhr.send(settings.data ? settings.data : null);
+
         // abort method
         settings.promise.abort = function () {
             xhr.abort();
@@ -480,6 +481,14 @@
 
             delete window[callbackName];
         }
+
+        // add abort
+        options.promise.abort = function () {
+            xhr.abort();
+        };
+
+        // add xhr
+        options.promise.xhr = xhr;
 
         return options.promise;
     }

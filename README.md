@@ -208,6 +208,7 @@ contents
 
 添加了promise ，支持 then 和 catch 方法。IE 不支持。。。
 
+在promise上面扩展了 xhr 对象，方便之处 abort 和 process 方法。
 
 
 ## 整体效果
