@@ -65,8 +65,10 @@
             options = url;
             url = undefined;
         }
+
+        options = options || {};
         //
-        var settings = extend({}, options || {});
+        var settings = extend({}, options);
 
         //
         for (var key in _settings) {
